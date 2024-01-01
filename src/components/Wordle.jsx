@@ -146,7 +146,7 @@ export default function Wordle() {
       }}
       onKeyDown={handleKeyDown}
     >
-      <h1 className="title">Wordle Clone</h1>
+      <h1 className="title">Chordle</h1>
       <div className={`notification ${solutionFound && "notification--green"}`}>
         {notification}
       </div>
