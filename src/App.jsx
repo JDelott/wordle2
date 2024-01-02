@@ -8,7 +8,10 @@ function App() {
   return (
     <div className="App">
       <Wordle />
-      <Piano />
+      <div>
+        <Piano />
+      </div>
+      
     </div>
   );
 }
