@@ -12,11 +12,7 @@ console.log(SOLUTION);
 export default function Wordle() {
   const [guesses, setGuesses] = useState([
     "     ",
-    "     ",
-    "     ",
-    "     ",
-    "     ",
-    "     ",
+   
   ]);
   const [solutionFound, setSolutionFound] = useState(false);
   const [activeLetterIndex, setActiveLetterIndex] = useState(0);
