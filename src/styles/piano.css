@@ -9,6 +9,7 @@ h1 {
 .piano {
   display: flex;
   justify-content: center;
+  padding-bottom: 50px;
 }
 
 .white-key {

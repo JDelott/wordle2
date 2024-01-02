@@ -4,11 +4,13 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding-bottom: 50px;
 
   .keyRow {
     display: flex;
     gap: 6px;
     justify-content: center;
+    padding-bottom: 20px;
   }
 
   .key {
