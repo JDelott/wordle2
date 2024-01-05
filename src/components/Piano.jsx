@@ -39,17 +39,17 @@ const keys = [
 ];
 
 const Piano = () => {
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      playNote(event);
-    };
+  // useEffect(() => {
+  //   const handleKeyDown = (event) => {
+  //     playNote(event);
+  //   };
 
-    window.addEventListener("keydown", handleKeyDown);
+    // window.addEventListener("keydown", handleKeyDown);
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []); 
+    // return () => {
+    //   window.removeEventListener("keydown", handleKeyDown);
+    // };
+  // }, []); 
   return (
     <div className="pianoPage">
       <h1>Piano</h1>

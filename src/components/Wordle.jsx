@@ -11,7 +11,7 @@ console.log(SOLUTION);
 
 export default function Wordle() {
   const [guesses, setGuesses] = useState([
-    "     ",
+    " ",
    
   ]);
   const [solutionFound, setSolutionFound] = useState(false);
@@ -30,7 +30,7 @@ export default function Wordle() {
   // // }, []);
 
   const typeLetter = (letter) => {
-    if (activeLetterIndex < 5) {
+    if (activeLetterIndex < 1) {
       setNotification("");
 
       let newGuesses = [...guesses];
