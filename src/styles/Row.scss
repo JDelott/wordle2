@@ -2,7 +2,7 @@
   width: 300px; /* Set a fixed width for the square container */
   height: 300px; /* Set a fixed height for the square container */
   font-weight: 800;
-  font-size: 2rem;
+  font-size: 12rem;
   position: relative; /* Add position: relative; for absolute positioning of letters */
 
   &--bounce {
@@ -19,6 +19,9 @@
     align-items: center;
     position: absolute; /* Position letters absolutely within the square container */
     transform-style: preserve-3d;
+    text-align: center;
+   
+   
 
     &--active {
       border-color: rgb(86, 87, 88);

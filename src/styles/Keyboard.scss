@@ -23,6 +23,8 @@
     height: 60px;
     font-weight: 600;
     transition: background-color 0.3s linear;
+    text-align: center; /* Center text horizontally */
+    line-height: 1; /* Center text vertically */
     cursor: pointer;
 
     &--absent {
@@ -35,6 +37,13 @@
 
     &--correct {
       background-color: #538d4e;
+    }
+
+    &--chosen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem; /* Adjust the font size as needed */
     }
   }
 

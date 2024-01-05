@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 
 
+
 // #region ------------ ICONS ---------
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
@@ -20,24 +21,35 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 // #endregion ------------ ICONS ---------
 
 // #region ------- Tracts -------------------------------------------------------
+import america from '../Music/america.mp3'
+// import enough from './music/Enough - NEFFEX.mp3'
+// import immortal from './music/Immortal - NEFFEX.mp3';
+// import playDead from './music/Play Dead - NEFFEX.mp3';
+// import winning from './music/Winning - NEFFEX.mp3';
 // #endregion ---------------------------------------------------------------
 
 // #region -------- Styled Components -----------------------------------------
 const Div = styled('div')(({theme}) => ({
-  height: '30vh', // Use 100% of the viewport height
-  justifyContent: 'center', // Center vertically
-  alignItems: 'center', // Center horizontally
-  
    
+    height:'100vh',
+    width:'100vw',
+    paddingTop: theme.spacing(2),
+  
+    
+    
 }))
 
-const CustomPaper = styled(Paper)(({theme}) => ({
-    backgroundColor: '#4c4c4c',
-    marginLeft: theme.spacing(6),
-    marginRight: theme.spacing(6),
-    padding: theme.spacing(2)
-}))
-
+const CustomPaper = styled(Paper)(({ theme }) => ({
+  backgroundColor: '#4c4c4c',
+  marginLeft: theme.spacing(6),
+  marginRight: theme.spacing(6),
+  padding: `${theme.spacing(2)} ${theme.spacing(4)}`, // Example: top/bottom 2, right/left 4
+  paddingBottom: theme.spacing(1), // Adjusted padding-bottom value
+  '& .MuiSlider-root': {
+    marginBottom: 0, 
+    // Adjusted margin-bottom for the Slider component
+  },
+}));
 const PSlider = styled(Slider)(({theme, ...props}) => ({
     color: 'lime',
     height: 2,
@@ -53,179 +65,156 @@ const PSlider = styled(Slider)(({theme, ...props}) => ({
 // #endregion ---------------------------------------------------------------
 
 
-// const playlist = [fade, enough, immortal, playDead, winning];
+const playlist = [america];
 
-
-// ... (imports)
 
 export default function Player() {
-  const audioPlayer = useRef();
+    const audioPlayer = useRef()
 
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(30);
-  const [mute, setMute] = useState(false);
-  const [elapsed, setElapsed] = useState(0);
-  const [duration, setDuration] = useState(0);
+    const [index, setIndex] = useState(0);
 
-  useEffect(() => {
-    if (audioPlayer) {
-      audioPlayer.current.volume = volume / 100;
+    const [currentSong] = useState(playlist[index]);
+
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [volume, setVolume] = useState(30);
+    const [mute, setMute] = useState(false);
+
+    const [elapsed, setElapsed] = useState(0);
+    const [duration, setDuration] = useState(0);
+
+    useEffect(() => {
+        if(audioPlayer){
+            audioPlayer.current.volume = volume / 100;
+        }
+
+        
+        if(isPlaying){
+            setInterval(() => {
+                const _duration = Math.floor(audioPlayer?.current?.duration);
+                const _elapsed = Math.floor(audioPlayer?.current?.currentTime);
+
+                setDuration(_duration);
+                setElapsed(_elapsed);
+            }, 100);
+        }
+
+    }, [
+        volume, isPlaying
+    ]);
+
+    function formatTime(time) {
+        if(time && !isNaN(time)){
+            const minutes = Math.floor(time / 60) < 10 ? `0${Math.floor(time / 60)}` : Math.floor(time / 60);
+            const seconds = Math.floor(time % 60) < 10 ? `0${Math.floor(time % 60)}` : Math.floor(time % 60);
+
+            return `${minutes}:${seconds}`;
+        }
+        return '00:00';
     }
 
-    if (isPlaying) {
-      setInterval(() => {
-        const _duration = Math.floor(audioPlayer?.current?.duration);
-        const _elapsed = Math.floor(audioPlayer?.current?.currentTime);
-
-        setDuration(_duration);
-        setElapsed(_elapsed);
-      }, 100);
+    const togglePlay = () => {
+        if(!isPlaying) {
+            audioPlayer.current.play()
+        }else {
+            audioPlayer.current.pause()
+        }
+        setIsPlaying(prev => !prev)
     }
-  }, [volume, isPlaying]);
 
-  function formatTime(time) {
-    if (time && !isNaN(time)) {
-      const minutes =
-        Math.floor(time / 60) < 10
-          ? `0${Math.floor(time / 60)}`
-          : Math.floor(time / 60);
-      const seconds =
-        Math.floor(time % 60) < 10
-          ? `0${Math.floor(time % 60)}`
-          : Math.floor(time % 60);
-
-      return `${minutes}:${seconds}`;
+    const toggleForward = () => {
+        audioPlayer.current.currentTime += 10;
     }
-    return '00:00';
-  }
 
-  const togglePlay = () => {
-    if (!isPlaying) {
-      audioPlayer.current.play();
-    } else {
-      audioPlayer.current.pause();
+    const toggleBackward = () => {
+        audioPlayer.current.currentTime -= 10;
     }
-    setIsPlaying((prev) => !prev);
-  };
 
-  const toggleForward = () => {
-    audioPlayer.current.currentTime += 10;
-  };
+    const toggleSkipForward = () => {
+        if(index >= playlist.length - 1) {
+            setIndex(0);
+            audioPlayer.current.src = playlist[0];
+            audioPlayer.current.play();
+        } else {
+            setIndex(prev => prev + 1);
+            audioPlayer.current.src = playlist[index + 1];
+            audioPlayer.current.play();
+        }
+    }
 
-  const toggleBackward = () => {
-    audioPlayer.current.currentTime -= 10;
-  };
+    const toggleSkipBackward = () => {
+        if(index > 0) {
+            setIndex(prev => prev - 1);
+            audioPlayer.current.src = playlist[index - 1];
+            audioPlayer.current.play();
+        }
+    }
+    
+    function VolumeBtns(){
+        return mute
+            ? <VolumeOffIcon sx={{color: 'lime', '&:hover': {color: 'white'}}} onClick={() => setMute(!mute)} />
+            : volume <= 20 ? <VolumeMuteIcon sx={{color: 'lime', '&:hover': {color: 'white'}}} onClick={() => setMute(!mute)} />
+            : volume <= 75 ? <VolumeDownIcon sx={{color: 'lime', '&:hover': {color: 'white'}}} onClick={() => setMute(!mute)} />
+            : <VolumeUpIcon sx={{color: 'lime', '&:hover': {color: 'white'}}} onClick={() => setMute(!mute)} />
+    }
 
-  function VolumeBtns() {
-    return mute ? (
-      <VolumeOffIcon
-        sx={{ color: 'lime', '&:hover': { color: 'white' } }}
-        onClick={() => setMute(!mute)}
-      />
-    ) : volume <= 20 ? (
-      <VolumeMuteIcon
-        sx={{ color: 'lime', '&:hover': { color: 'white' } }}
-        onClick={() => setMute(!mute)}
-      />
-    ) : volume <= 75 ? (
-      <VolumeDownIcon
-        sx={{ color: 'lime', '&:hover': { color: 'white' } }}
-        onClick={() => setMute(!mute)}
-      />
-    ) : (
-      <VolumeUpIcon
-        sx={{ color: 'lime', '&:hover': { color: 'white' } }}
-        onClick={() => setMute(!mute)}
-      />
-    );
-  }
+    return (
+        <Div>
+            <audio src={currentSong} ref={audioPlayer} muted={mute} />
+            <CustomPaper>
+                <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                    <Stack direction='row' spacing={1} 
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            width: '25%',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <VolumeBtns  />
 
-  return (
-    <Div>
-      <audio ref={audioPlayer} muted={mute} />
-      <CustomPaper>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-start',
-              width: '25%',
-              alignItems: 'center',
-            }}
-          >
-            <VolumeBtns />
+                        <PSlider min={0} max={100} value={volume}
+                            onChange={(e, v) => setVolume(v)}
+                        />
+                    </Stack>
 
-            <PSlider
-              min={0}
-              max={100}
-              value={volume}
-              onChange={(e, v) => setVolume(v)}
-            />
-          </Stack>
+                    <Stack direction='row' spacing={1}
+                        sx={{
+                            display: 'flex',
+                            width: '40%',
+                            alignItems: 'center'
+                        }}>
+                        <SkipPreviousIcon 
+                            sx={{
+                                color: 'lime', 
+                                '&:hover': {color: 'white'}
+                            }} 
+                            onClick={toggleSkipBackward} disabled={true}/>
+                        <FastRewindIcon sx={{color: 'lime', '&:hover': {color: 'white'}}} onClick={toggleBackward}/>
 
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{
-              display: 'flex',
-              width: '40%',
-              alignItems: 'center',
-            }}
-          >
-            <FastRewindIcon
-              sx={{ color: 'lime', '&:hover': { color: 'white' } }}
-              onClick={toggleBackward}
-            />
+                        {!isPlaying
+                            ?   <PlayArrowIcon fontSize={'large'} sx={{color: 'lime', '&:hover': {color: 'white'}}} onClick={togglePlay}/>
+                            :   <PauseIcon fontSize={'large'} sx={{color: 'lime', '&:hover': {color: 'white'}}} onClick={togglePlay}/>
+                        }
 
-            {!isPlaying ? (
-              <PlayArrowIcon
-                fontSize={'large'}
-                sx={{ color: 'lime', '&:hover': { color: 'white' } }}
-                onClick={togglePlay}
-              />
-            ) : (
-              <PauseIcon
-                fontSize={'large'}
-                sx={{ color: 'lime', '&:hover': { color: 'white' } }}
-                onClick={togglePlay}
-              />
-            )}
 
-            <FastForwardIcon
-              sx={{ color: 'lime', '&:hover': { color: 'white' } }}
-              onClick={toggleForward}
-            />
-          </Stack>
+                        <FastForwardIcon sx={{color: 'lime', '&:hover': {color: 'white'}}} onClick={toggleForward} />
+                        <SkipNextIcon sx={{color: 'lime', '&:hover': {color: 'white'}}} onClick={toggleSkipForward}/>
+                    </Stack>
 
-          <Stack
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-            }}
-          />
-        </Box>
-        <Stack
-          spacing={1}
-          direction="row"
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <Typography sx={{ color: 'lime' }}>{formatTime(elapsed)}</Typography>
-          <PSlider thumbless value={elapsed} max={duration} />
-          <Typography sx={{ color: 'lime' }}>
-            {formatTime(duration - elapsed)}
-          </Typography>
-        </Stack>
-      </CustomPaper>
-    </Div>
-  );
+                    <Stack sx={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                    }} />
+                </Box>
+                <Stack spacing={1} direction='row' sx={{
+                    display: 'flex',
+                    alignItems: 'center'
+                }}>
+                    <Typography sx={{color: 'lime'}}>{formatTime(elapsed)}</Typography>
+                    <PSlider thumbless={'true'} value={elapsed} max={duration} />
+                    <Typography sx={{color: 'lime'}}>{formatTime(duration - elapsed)}</Typography>
+                </Stack>
+            </CustomPaper>
+        </Div>
+    )
 }

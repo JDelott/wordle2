@@ -23,11 +23,11 @@ export default function Wordle() {
   const [presentLetters, setPresentLetters] = useState([]);
   const [absentLetters, setAbsentLetters] = useState([]);
 
-  const wordleRef = useRef();
+  // const wordleRef = useRef();
 
-  useEffect(() => {
-    wordleRef.current.focus();
-  }, []);
+  // useEffect(() => {
+  // //   wordleRef.current.focus();
+  // // }, []);
 
   const typeLetter = (letter) => {
     if (activeLetterIndex < 5) {
@@ -54,7 +54,7 @@ export default function Wordle() {
   };
 
   const hitEnter = () => {
-    if (activeLetterIndex === 5) {
+    if (activeLetterIndex === 1) {
       const currentGuess = guesses[activeRowIndex];
 
       if (!potentialWords.includes(currentGuess)) {
@@ -135,11 +135,11 @@ export default function Wordle() {
   return (
     <div
       className="wordle"
-      ref={wordleRef}
+      // ref={wordleRef}
       tabIndex="0"
-      onBlur={(e) => {
-        e.target.focus();
-      }}
+      // onBlur={(e) => {
+      //   e.target.focus();
+      // }}
       onKeyDown={handleKeyDown}
     >
       <h1 className="title">Chordle</h1>

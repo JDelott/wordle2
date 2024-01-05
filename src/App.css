@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800;600");
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Music&display=swap');
 body {
   margin: 0;
   padding: 0;
@@ -10,4 +10,9 @@ body {
   align-items: center;
   font-family: "Libre Franklin", sans-serif;
   text-transform: uppercase;
+}
+
+
+.notes {
+  font-family: "Noto Music";
 }

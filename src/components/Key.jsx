@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import "../styles/Keyboard.scss";
 
 export default function Key({
   isAbsent,
@@ -7,12 +8,19 @@ export default function Key({
   letter,
   typeLetter,
 }) {
+  const [chosenLetter, setChosenLetter] = useState(null);
+
+  const handleClick = () => {
+    typeLetter(letter);
+    setChosenLetter(letter);
+  };
+
   return (
     <div
       className={`key ${isAbsent && "key--absent"} ${
         isPresent && "key--present"
-      } ${isCorrect && "key--correct"}`}
-      onClick={() => typeLetter(letter)}
+      } ${isCorrect && "key--correct"} ${chosenLetter ? "key--chosen" : ""}`}
+      onClick={handleClick}
     >
       {letter}
     </div>

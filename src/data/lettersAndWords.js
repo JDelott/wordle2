@@ -1,12 +1,14 @@
+
+
 // prettier-ignore
 export const LETTERS = [
-    'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'A', 'Bb',
-    'B', 'C#', 
+    'C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A', 'B♭',
+    'B', 'C♯', 
   ];
 
 export const potentialWords =[
-  'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'A', 'Bb',
-    'B', 'C#', 
+  'C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A', 'B♭',
+    'B', 'C♯', 
 ]
 
 

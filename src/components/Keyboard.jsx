@@ -12,7 +12,7 @@ export default function Keyboard({
   hitBackspace,
 }) {
   return (
-    <div className="keyboard">
+    <div className="keyboard notes">
       <div className="keyRow ">
         {LETTERS.slice(0, 10).map((letter) => {
           return (
